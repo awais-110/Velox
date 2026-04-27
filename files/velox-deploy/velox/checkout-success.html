@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Success — VELOX</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#050507;--white:#F5F4F0;--accent:#C8FF57;--green:#57FF8A;--font:'Merriweather Sans',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--white);font-family:var(--font);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.bg{position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(87,255,138,.06),transparent);}
+.card{background:#0e0e13;border:1px solid rgba(87,255,138,.15);border-radius:24px;padding:52px 48px;max-width:480px;width:90%;text-align:center;position:relative;z-index:1;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.9) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.check{width:72px;height:72px;background:rgba(87,255,138,.1);border:1px solid rgba(87,255,138,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;animation:checkPop .5s cubic-bezier(.34,1.56,.64,1) .3s both;}
+@keyframes checkPop{from{transform:scale(0);}to{transform:scale(1);}}
+.order-id{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(87,255,138,.6);margin-bottom:14px;}
+h1{font-size:28px;font-weight:800;letter-spacing:-.04em;margin-bottom:12px;}
+.sub{font-size:15px;color:rgba(255,255,255,.5);font-weight:300;line-height:1.7;margin-bottom:32px;}
+.plan-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(200,255,87,.08);border:1px solid rgba(200,255,87,.15);color:var(--accent);padding:6px 16px;border-radius:100px;font-size:12px;font-weight:700;margin-bottom:32px;}
+.divider{height:1px;background:rgba(255,255,255,.05);margin:28px 0;}
+.includes{text-align:left;margin-bottom:28px;}
+.includes h3{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px;}
+.include-item{display:flex;align-items:center;gap:10px;font-size:13.5px;color:rgba(255,255,255,.65);margin-bottom:10px;font-weight:300;}
+.include-item::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0;}
+.download-btn{display:block;background:var(--accent);color:#000;padding:13px 32px;border-radius:100px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:12px;transition:transform .2s,box-shadow .2s;}
+.download-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(200,255,87,.3);}
+.back-btn{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s;}
+.back-btn:hover{color:var(--white);}
+.demo-notice{background:rgba(255,204,68,.06);border:1px solid rgba(255,204,68,.12);border-radius:10px;padding:12px 16px;font-size:12px;color:rgba(255,204,68,.8);margin-bottom:24px;line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="card">
+  <div class="check">✓</div>
+  <div class="order-id" id="orderId">Order #VLX-DEMO</div>
+  <h1>Payment successful!</h1>
+  <p class="sub">Your files are ready. Check your email for the download link.</p>
+  <div class="plan-badge" id="planBadge">✦ Pro Plan</div>
+
+  <div class="demo-notice" id="demoNotice">
+    🔧 <strong>Demo Mode</strong> — This is a simulated checkout. Connect Stripe to enable real payments.
+  </div>
+
+  <div class="divider"></div>
+  <div class="includes">
+    <h3>What's included</h3>
+    <div class="include-item">All 40+ animated hero sections</div>
+    <div class="include-item">HTML + CSS + JS source code</div>
+    <div class="include-item">Full AI Prompts library (100+)</div>
+    <div class="include-item">Figma source files</div>
+    <div class="include-item">Lifetime updates</div>
+    <div class="include-item">Priority support</div>
+  </div>
+
+  <a href="velox-standalone.html" class="download-btn">Download Files →</a>
+  <a href="velox-standalone.html" class="back-btn">← Back to Velox</a>
+</div>
+
+<script>
+// Parse URL params for plan info
+const params = new URLSearchParams(window.location.search);
+const plan = params.get('plan') || 'Pro';
+const orderId = 'VLX-' + Math.random().toString(36).substr(2,6).toUpperCase();
+
+document.getElementById('orderId').textContent = 'Order #' + orderId;
+document.getElementById('planBadge').textContent = '✦ ' + plan + ' Plan';
+
+// If demo mode is OFF in localStorage, hide notice
+if(localStorage.getItem('demoMode') === 'false'){
+  document.getElementById('demoNotice').style.display = 'none';
+}
+
+// Update includes based on plan
+if(plan === 'Starter'){
+  document.querySelector('.includes').innerHTML = `
+    <h3>What's included</h3>
+    <div class="include-item" style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:rgba(255,255,255,.65);margin-bottom:10px;font-weight:300;">◯ 15 hero sections</div>
+    <div class="include-item" style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:rgba(255,255,255,.65);margin-bottom:10px;font-weight:300;">◯ HTML + CSS + JS source code</div>
+    <div class="include-item" style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:rgba(255,255,255,.65);margin-bottom:10px;font-weight:300;">◯ Commercial license</div>
+    <div class="include-item" style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:rgba(255,255,255,.65);margin-bottom:10px;font-weight:300;">◯ 6 months updates</div>
+  `;
+  document.querySelectorAll('.include-item').forEach(el => el.style.setProperty('--before','◯'));
+}
+</script>
+</body>
+</html>

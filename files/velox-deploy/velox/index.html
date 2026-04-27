@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VELOX — Premium animated hero sections and AI prompts. Copy-paste, production-ready, zero dependencies.">
+<meta name="theme-color" content="#050507">
+<title>VELOX — Premium Animated Hero Sections</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23050507'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23C8FF57'>V</text></svg>">
+<link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+<div id="toast"></div>
+
+<!-- MOBILE MENU -->
+<div id="mob-menu">
+  <a href="#" onclick="navTo('home')">Sections</a>
+  <a href="#" onclick="navTo('prompts')">Prompts</a>
+  <a href="#" onclick="navTo('about')">About</a>
+  <a href="#" onclick="navTo('faq')">FAQ</a>
+  <a href="#" onclick="navTo('blog')">Blog</a>
+  <a href="#" onclick="navTo('contact')">Contact</a>
+  <a href="#" onclick="navTo('home');setTimeout(()=>scrollToEl('#pricing'),150)" style="color:var(--accent);margin-top:8px;">Get Access →</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="logo" href="#" onclick="navTo('home')">VEL<em>OX</em></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="navTo('home')" class="active" id="nl-home">Sections</a></li>
+    <li><a href="#" onclick="navTo('prompts')" id="nl-prompts">Prompts</a></li>
+    <li><a href="#" onclick="navTo('about')" id="nl-about">About</a></li>
+    <li><a href="#" onclick="navTo('faq')" id="nl-faq">FAQ</a></li>
+    <li><a href="#" onclick="navTo('blog')" id="nl-blog">Blog</a></li>
+    <li><a href="#" onclick="navTo('contact')" id="nl-contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="btn-cta" href="#" onclick="navTo('home');setTimeout(()=>scrollToEl('#pricing'),150)">Get Access →</a>
+    <button class="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ══════════ HOME ══════════ -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+    <div class="hero-badge">✦ Premium Animated Web Experiences</div>
+    <h1 class="hero-title">
+      <span style="display:block;">Ship <span class="lime">stunning</span></span>
+      <span style="display:block;" class="hollow">websites</span>
+      <span style="display:block;">in seconds.</span>
+    </h1>
+    <p class="hero-sub">Copy-paste animated hero sections + AI prompts for Claude, v0 and Cursor. Built for startups, agencies and creators who demand <em>exceptional</em> quality.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-pri" onclick="scrollToEl('#previews')">Browse Sections ↓</a>
+      <a href="#" class="btn-sec" onclick="navTo('prompts')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x=".5" y=".5" width="11" height="11" rx="2.5" stroke="white" stroke-opacity=".4"/><path d="M3 6h6M6 3v6" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Get AI Prompts
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num" id="c1">0</span><span class="stat-lbl">Sections</span></div>
+      <div class="stat-div"></div>
+      <div><span class="stat-num" id="c2">0</span><span class="stat-lbl">Customers</span></div>
+      <div class="stat-div"></div>
+      <div><span class="stat-num" id="c3">0</span><span class="stat-lbl">Components</span></div>
+      <div class="stat-div"></div>
+      <div><span class="stat-num" id="c4">0</span><span class="stat-lbl">5★ Reviews</span></div>
+    </div>
+  </section>
+
+  <!-- FREE BANNER (replaces marquee) -->
+  <div class="free-banner">
+    <span class="free-banner-badge">Free Sections</span>
+    <p>5 hero sections are completely free — no sign-in, no email, no payment. Just copy the code.</p>
+    <a href="#" onclick="scrollToEl('#previews')">Browse free →</a>
+  </div>
+
+  <!-- SECTIONS LIBRARY -->
+  <section class="sec" id="previews">
+    <div class="rev">
+      <div class="sec-lbl">Sections Library</div>
+      <h2 class="sec-title">Hand-crafted.<br>Ready to ship.</h2>
+      <p class="sec-sub">Every section is meticulously animated. Free ones include full source. Premium sections unlock with access.</p>
+      <div class="tabs">
+        <button class="tab on" onclick="filterCards('all',this)">All</button>
+        <button class="tab" onclick="filterCards('hero',this)">Hero</button>
+        <button class="tab" onclick="filterCards('saas',this)">SaaS</button>
+        <button class="tab" onclick="filterCards('agency',this)">Agency</button>
+        <button class="tab" onclick="filterCards('portfolio',this)">Portfolio</button>
+        <button class="tab" onclick="filterCards('dark',this)">Dark</button>
+      </div>
+    </div>
+    <div class="cards-grid rev d1" id="cardsGrid"></div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="sec" style="background:var(--gd);" id="features">
+    <div class="rev">
+      <div class="sec-lbl">Why Velox</div>
+      <h2 class="sec-title">Everything you need<br>to ship faster.</h2>
+    </div>
+    <div class="feat-grid rev d1">
+      <div class="feat-item"><div class="feat-icon">⚡</div><div class="feat-t">Instant copy-paste</div><p class="feat-p">Every section is a self-contained HTML file. No dependencies, no build steps. Copy, paste, ship.</p></div>
+      <div class="feat-item"><div class="feat-icon">🎬</div><div class="feat-t">Cinematic animations</div><p class="feat-p">GPU-accelerated CSS animations that perform fluidly on all devices — zero libraries required.</p></div>
+      <div class="feat-item"><div class="feat-icon">🤖</div><div class="feat-t">AI-ready prompts</div><p class="feat-p">Expert prompts tuned for Claude, v0, Cursor and ChatGPT. Customize anything without touching CSS.</p></div>
+      <div class="feat-item"><div class="feat-icon">♾️</div><div class="feat-t">Lifetime updates</div><p class="feat-p">Buy once, own forever. New sections every 2-3 weeks are automatically yours. No recurring fees.</p></div>
+    </div>
+  </section>
+
+  <!-- PRICING — DEMO MODE -->
+  <section class="sec" id="pricing">
+    <div class="rev" style="text-align:center;">
+      <div class="sec-lbl center">Pricing</div>
+      <h2 class="sec-title">Simple, honest pricing.</h2>
+      <p class="sec-sub center">One-time payment. No subscriptions. Own it forever.</p>
+    </div>
+
+    <!-- DEMO BROWSER -->
+    <div class="demo-preview rev d1">
+      <div class="demo-browser-bar">
+        <div class="demo-dots">
+          <div class="demo-dot" style="background:#FF5F57;"></div>
+          <div class="demo-dot" style="background:#FEBC2E;"></div>
+          <div class="demo-dot" style="background:#28C840;"></div>
+        </div>
+        <div class="demo-url">velox.design — live preview</div>
+        <div style="font-size:10.5px;color:var(--gray);margin-left:auto;font-weight:600;letter-spacing:.05em;">INTERACTIVE DEMO</div>
+      </div>
+      <div class="demo-frame">
+        <div class="demo-section active" id="ds-0">
+          <div style="height:100%;background:linear-gradient(160deg,#06060f,#130820);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(123,47,255,.4),transparent);top:-80px;right:-60px;filter:blur(60px);animation:fO 8s ease-in-out infinite;"></div>
+            <div style="position:absolute;height:1px;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(123,47,255,.6),transparent);animation:scan 3s linear infinite;"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,255,87,.7);margin-bottom:16px;position:relative;">✦ NEBULA HERO</div>
+            <div style="font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-.05em;line-height:.9;margin-bottom:16px;position:relative;">Build something<br><span style="color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.5);">extraordinary</span></div>
+            <div style="font-size:13px;color:rgba(255,255,255,.4);font-weight:300;max-width:340px;line-height:1.7;margin-bottom:24px;position:relative;">Premium animated hero sections for modern products. Copy, paste, launch.</div>
+            <div style="display:flex;gap:10px;position:relative;"><div style="background:var(--accent);color:#000;padding:9px 22px;border-radius:100px;font-size:12px;font-weight:700;">Get Started →</div><div style="border:1px solid rgba(255,255,255,.15);color:#fff;padding:9px 22px;border-radius:100px;font-size:12px;">Learn more</div></div>
+          </div>
+        </div>
+        <div class="demo-section" id="ds-1">
+          <div style="height:100%;background:#020e05;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(200,255,87,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(200,255,87,.055) 1px,transparent 1px);background-size:26px 26px;animation:gm 8s linear infinite;"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,255,87,.7);margin-bottom:16px;position:relative;">⚡ GRID SAAS</div>
+            <div style="font-size:clamp(26px,4vw,50px);font-weight:800;letter-spacing:-.05em;line-height:.92;margin-bottom:16px;position:relative;color:var(--accent);">The platform<br>teams love</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.4);font-weight:300;max-width:320px;line-height:1.7;margin-bottom:24px;position:relative;">Ship faster with components that actually look premium.</div>
+            <div style="display:flex;gap:10px;position:relative;"><div style="background:var(--accent);color:#000;padding:9px 22px;border-radius:100px;font-size:12px;font-weight:700;">Start Free</div></div>
+          </div>
+        </div>
+        <div class="demo-section" id="ds-2">
+          <div style="height:100%;background:#03090d;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;bottom:-10px;left:-10%;width:120%;height:80px;background:rgba(0,212,255,.07);border-radius:50% 50% 0 0;animation:wp 4s ease-in-out infinite;"></div>
+            <div style="position:absolute;bottom:-20px;left:-10%;width:120%;height:80px;background:rgba(0,212,255,.04);border-radius:50% 50% 0 0;animation:wp 4s ease-in-out infinite;animation-delay:-2s;opacity:.5;"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(0,212,255,.7);margin-bottom:16px;position:relative;">🌊 WAVE TECH</div>
+            <div style="font-size:clamp(26px,4vw,50px);font-weight:800;letter-spacing:-.05em;line-height:.92;margin-bottom:16px;position:relative;color:var(--cyan);">Finance,<br>reimagined</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.4);font-weight:300;max-width:320px;line-height:1.7;margin-bottom:24px;position:relative;">Modern financial infrastructure for next-generation products.</div>
+            <div style="display:flex;gap:10px;position:relative;"><div style="background:var(--cyan);color:#000;padding:9px 22px;border-radius:100px;font-size:12px;font-weight:700;">Get Demo</div></div>
+          </div>
+        </div>
+        <div class="demo-section" id="ds-3">
+          <div style="height:100%;background:linear-gradient(160deg,#070500,#160f00);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;width:300px;height:100px;background:rgba(255,180,0,.12);filter:blur(48px);animation:gp 3.5s ease-in-out infinite;"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,204,68,.7);margin-bottom:16px;position:relative;">✨ GLOW LANDING</div>
+            <div style="font-size:clamp(26px,4vw,50px);font-weight:800;letter-spacing:-.05em;line-height:.92;margin-bottom:16px;position:relative;color:#FFCC44;">Premium.<br>Powerful.</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.4);font-weight:300;max-width:320px;line-height:1.7;margin-bottom:24px;position:relative;">The luxury product landing page your brand deserves.</div>
+            <div style="display:flex;gap:10px;position:relative;"><div style="background:#FFCC44;color:#000;padding:9px 22px;border-radius:100px;font-size:12px;font-weight:700;">Shop Now</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-nav rev" id="demoNav">
+      <div class="demo-ndot on" onclick="setDemo(0)"></div>
+      <div class="demo-ndot" onclick="setDemo(1)"></div>
+      <div class="demo-ndot" onclick="setDemo(2)"></div>
+      <div class="demo-ndot" onclick="setDemo(3)"></div>
+    </div>
+
+    <div class="price-grid rev d2" id="priceGrid"></div>
+    <p style="text-align:center;font-size:11.5px;color:rgba(255,255,255,.25);margin-top:24px;">Secure checkout via Stripe &nbsp;·&nbsp; Instant delivery &nbsp;·&nbsp; 7-day refund guarantee</p>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="sec" style="background:var(--gd);">
+    <div class="rev" style="text-align:center;">
+      <div class="sec-lbl center">Reviews</div>
+      <h2 class="sec-title">Loved by builders.</h2>
+    </div>
+    <div class="testi-grid rev d1">
+      <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-text">"Saved me 3 days of work. The animations are so smooth — clients keep asking how I built it so fast."</p><div class="t-author"><div class="t-av" style="background:var(--accent);">AK</div><div><div class="t-name">Alex Kim</div><div class="t-role">Freelance Designer</div></div></div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-text">"Used Velox for our SaaS launch. Conversion rate went up 34%. Insane quality for the price."</p><div class="t-author"><div class="t-av" style="background:var(--red);">SP</div><div><div class="t-name">Sara Patel</div><div class="t-role">Startup Founder</div></div></div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-text">"Best agency investment this year. Clean code, easy to customize. We use these on every project."</p><div class="t-author"><div class="t-av" style="background:var(--purple);">MR</div><div><div class="t-name">Marcus Reid</div><div class="t-role">Creative Director</div></div></div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-text">"The AI prompts are genius. Customized a hero in 10 minutes with Claude. Zero CSS knowledge needed."</p><div class="t-author"><div class="t-av" style="background:var(--cyan);color:var(--black);">JL</div><div><div class="t-name">Jasmine Lee</div><div class="t-role">Product Manager</div></div></div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-text">"Dropped a hero into our landing in 5 minutes. Bounce rate dropped 20% the same week. Incredible."</p><div class="t-author"><div class="t-av" style="background:#FFCC44;color:var(--black);">TO</div><div><div class="t-name">Tunde Okafor</div><div class="t-role">Growth Marketer</div></div></div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-text">"The cleanest dark-theme components I've ever purchased. Worth every penny, no hesitation at all."</p><div class="t-author"><div class="t-av" style="background:#FF6CF2;color:var(--black);">EM</div><div><div class="t-name">Elena Marsh</div><div class="t-role">UI/UX Designer</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-sec">
+    <h2 class="cta-title rev">Start building<br><span style="color:var(--accent);">extraordinary</span><br>today.</h2>
+    <p class="cta-sub rev d1">Join 2,400+ designers and developers who ship faster with Velox.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;" class="rev d2">
+      <a href="#" class="btn-pri" onclick="scrollToEl('#pricing')">Get Instant Access →</a>
+      <a href="#" class="btn-sec" onclick="navTo('contact')">Get in Touch</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-top">
+      <div class="foot-brand"><a class="logo" href="#" onclick="navTo('home')">VEL<em>OX</em></a><p>Premium animated web sections for designers and developers who build exceptional products.</p></div>
+      <div class="foot-col"><h4>Product</h4><ul><li><a href="#" onclick="navTo('home')">Sections Library</a></li><li><a href="#" onclick="navTo('prompts')">AI Prompts</a></li><li><a href="#" onclick="scrollToEl('#pricing')">Pricing</a></li><li><a href="#" onclick="navTo('blog')">Blog</a></li></ul></div>
+      <div class="foot-col"><h4>Company</h4><ul><li><a href="#" onclick="navTo('about')">About</a></li><li><a href="#" onclick="navTo('faq')">FAQ</a></li><li><a href="#" onclick="navTo('contact')">Contact</a></li><li><a href="#">Changelog</a></li></ul></div>
+      <div class="foot-col"><h4>Legal</h4><ul><li><a href="#">License</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Refunds</a></li></ul></div>
+    </div>
+    <div class="foot-bot">
+      <p class="foot-copy">© 2025 Velox. All rights reserved.</p>
+      <div class="socials"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">GH</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ PROMPTS ══════════ -->
+<div class="page" id="page-prompts">
+  <div class="prompts-hero">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent,var(--black) 88%);"></div>
+    <div style="position:relative;">
+      <div class="hero-badge" style="background:rgba(123,47,255,.1);border-color:rgba(123,47,255,.25);color:#A67BFF;">✦ AI Prompts Library</div>
+      <h1 class="hero-title" style="font-size:clamp(44px,7vw,96px);">Build anything<br>with <span class="lime">AI.</span></h1>
+      <p class="hero-sub">Expert-crafted prompts for Claude, v0, Cursor and ChatGPT. Paste and get production-ready sections instantly.</p>
+    </div>
+  </div>
+  <div class="prompts-main">
+    <div class="pf-row rev">
+      <div class="pf-group">
+        <div class="pf-lbl">AI Tool</div>
+        <div class="pf-btns" id="toolF">
+          <button class="f-btn on" onclick="filterTool('all',this)">All Tools</button>
+          <button class="f-btn" onclick="filterTool('claude',this)">Claude</button>
+          <button class="f-btn" onclick="filterTool('v0',this)">v0</button>
+          <button class="f-btn" onclick="filterTool('cursor',this)">Cursor</button>
+          <button class="f-btn" onclick="filterTool('gpt',this)">ChatGPT</button>
+        </div>
+      </div>
+      <div class="pf-group">
+        <div class="pf-lbl">Category</div>
+        <div class="pf-btns" id="catF">
+          <button class="f-btn on" onclick="filterCat('all',this)">All</button>
+          <button class="f-btn" onclick="filterCat('hero',this)">Hero</button>
+          <button class="f-btn" onclick="filterCat('saas',this)">SaaS</button>
+          <button class="f-btn" onclick="filterCat('agency',this)">Agency</button>
+          <button class="f-btn" onclick="filterCat('portfolio',this)">Portfolio</button>
+          <button class="f-btn" onclick="filterCat('startup',this)">Startup</button>
+        </div>
+      </div>
+    </div>
+    <div class="prompts-grid" id="promptsGrid"></div>
+  </div>
+  <footer><div class="foot-bot"><p class="foot-copy">© 2025 Velox.</p><div class="socials"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">GH</a></div></div></footer>
+</div>
+
+<!-- ══════════ ABOUT ══════════ -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <div class="sec-lbl">Our Story</div>
+    <h1 class="sec-title" style="font-size:clamp(38px,5vw,66px);">We got tired of<br>ugly websites.</h1>
+    <p class="sec-sub" style="margin-top:14px;">So we built the resource we always wished existed — a library of genuinely beautiful, animated components that anyone can use.</p>
+  </div>
+  <div class="about-body">
+    <div class="about-vis rev"><div class="vis-bg"></div><div class="vis-orb"></div><div class="vis-txt" style="position:relative;">VELOX</div></div>
+    <div class="about-grid rev">
+      <div class="about-stat"><span class="a-n">40+</span><span class="a-l">Animated Sections</span></div>
+      <div class="about-stat"><span class="a-n">2,400+</span><span class="a-l">Happy Customers</span></div>
+      <div class="about-stat"><span class="a-n">100+</span><span class="a-l">AI Prompts</span></div>
+      <div class="about-stat"><span class="a-n">4.9★</span><span class="a-l">Average Rating</span></div>
+    </div>
+    <p class="about-txt rev"><strong>Velox started in 2024</strong> when our founder was building his fifth SaaS landing page and copying the same mediocre hero section for the fifth time. There had to be a better way.</p>
+    <p class="about-txt rev d1">We spent six months hand-crafting every animation, obsessing over every easing curve and performance profile. The result is a library of sections that actually feel premium.</p>
+    <p class="about-txt rev d2">With the rise of AI coding tools, we added our <strong>AI Prompts Library</strong> — expert-written prompts tuned for Claude, v0, Cursor and ChatGPT so you can customize any section without writing CSS yourself.</p>
+    <div style="margin-top:44px;" class="rev d3"><a href="#" class="btn-pri" onclick="navTo('home');setTimeout(()=>scrollToEl('#pricing'),150)">Get Full Access →</a></div>
+  </div>
+  <footer><div class="foot-bot"><p class="foot-copy">© 2025 Velox.</p><div class="socials"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">GH</a></div></div></footer>
+</div>
+
+<!-- ══════════ FAQ ══════════ -->
+<div class="page" id="page-faq">
+  <div class="faq-hero rev">
+    <div class="sec-lbl center">FAQ</div>
+    <h1 class="sec-title" style="text-align:center;">Questions answered.</h1>
+    <p class="sec-sub center">Everything you need to know before buying.</p>
+  </div>
+  <div class="faq-body" id="faqBody"></div>
+  <footer><div class="foot-bot"><p class="foot-copy">© 2025 Velox.</p><div class="socials"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">GH</a></div></div></footer>
+</div>
+
+<!-- ══════════ BLOG ══════════ -->
+<div class="page" id="page-blog">
+  <div class="blog-hero rev" style="padding:160px 48px 60px;">
+    <div class="sec-lbl">Blog</div>
+    <h1 class="sec-title">Design, motion<br>&amp; AI insights.</h1>
+    <p class="sec-sub" style="margin-top:12px;">Tips, tutorials and trends for builders who care about craft.</p>
+  </div>
+  <div class="blog-grid-wrap rev d1" id="blogGrid"></div>
+  <footer><div class="foot-bot" style="padding:26px 48px 0;border-top:1px solid var(--border);"><p class="foot-copy">© 2025 Velox.</p><div class="socials"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">GH</a></div></div></footer>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-hero rev">
+    <div class="sec-lbl center">Contact</div>
+    <h1 class="sec-title" style="text-align:center;">Let's talk.</h1>
+    <p class="sec-sub center">Questions, custom work, partnerships — we're here.</p>
+  </div>
+  <div class="contact-body">
+    <div class="contact-grid rev">
+      <div class="contact-card">
+        <div class="contact-card-icon">✉️</div>
+        <div class="contact-card-title">Email Us</div>
+        <p class="contact-card-text">For general questions, licensing inquiries or feedback.</p>
+        <a href="mailto:hello@velox.design" class="contact-card-link">hello@velox.design</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">⚡</div>
+        <div class="contact-card-title">Priority Support</div>
+        <p class="contact-card-text">Agency plan customers get a dedicated Slack channel with same-day responses.</p>
+        <a href="#" class="contact-card-link" onclick="navTo('home');setTimeout(()=>scrollToEl('#pricing'),150)">View Agency plan →</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">🤝</div>
+        <div class="contact-card-title">Partnerships</div>
+        <p class="contact-card-text">Interested in bundling Velox with your product or course?</p>
+        <a href="mailto:partners@velox.design" class="contact-card-link">partners@velox.design</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">🐦</div>
+        <div class="contact-card-title">Follow Along</div>
+        <p class="contact-card-text">We share design tips, new sections and behind-the-scenes on X.</p>
+        <a href="#" class="contact-card-link">@veloxdesign →</a>
+      </div>
+    </div>
+
+    <div class="contact-form rev d1">
+      <div id="contactFormInner">
+        <h3>Send a message</h3>
+        <p>We read every message and respond within 24 hours on business days.</p>
+        <div class="form-row">
+          <div class="form-field"><label>First name</label><input type="text" placeholder="Alex" id="cf-first"></div>
+          <div class="form-field"><label>Last name</label><input type="text" placeholder="Kim" id="cf-last"></div>
+        </div>
+        <div class="form-field"><label>Email</label><input type="email" placeholder="alex@studio.com" id="cf-email"></div>
+        <div class="form-field">
+          <label>Topic</label>
+          <select id="cf-topic">
+            <option value="">Select a topic...</option>
+            <option>General question</option>
+            <option>Technical support</option>
+            <option>Licensing / commercial use</option>
+            <option>Custom section request</option>
+            <option>Partnership inquiry</option>
+            <option>Refund request</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field"><label>Message</label><textarea placeholder="Tell us what's on your mind..." id="cf-msg"></textarea></div>
+        <button class="form-submit" onclick="submitContact()">Send Message →</button>
+      </div>
+      <div class="form-success" id="contactSuccess">
+        <div class="fs-icon">✅</div>
+        <h4>Message sent!</h4>
+        <p>We'll get back to you within 24 hours.<br>Check your spam folder if you don't hear from us.</p>
+      </div>
+    </div>
+  </div>
+  <footer><div class="foot-bot"><p class="foot-copy">© 2025 Velox.</p><div class="socials"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">GH</a></div></div></footer>
+</div>
+
+<!-- ══════════ MODAL ══════════ -->
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-title" id="mTitle"></div>
+    <p class="modal-desc" id="mDesc"></p>
+    <div class="modal-price" id="mPrice"></div>
+    <div id="mFreeWrap" style="display:none;">
+      <div class="free-notice">🎁 Free — no sign-in, no payment. Copy the code below and use anywhere.</div>
+      <pre class="modal-code-block" id="mCode"></pre>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <button class="btn-pri" style="flex:1;" onclick="copyCode()">Copy Code</button>
+        <button class="btn-sec" onclick="closeModalBtn()" style="border-radius:100px;font-size:13px;font-weight:500;">Close</button>
+      </div>
+    </div>
+    <div id="mActPremium">
+      <ul class="modal-ul">
+        <li>Full HTML + CSS + JS source code</li>
+        <li>Customize via CSS variables</li>
+        <li>Zero external dependencies</li>
+        <li>Commercial use license included</li>
+        <li>Matching AI prompt included</li>
+      </ul>
+      <div class="modal-acts">
+        <a href="#" class="btn-pri" style="flex:1;text-align:center;" onclick="navTo('home');setTimeout(()=>scrollToEl('#pricing'),150);closeModalBtn()">Get Access →</a>
+        <button class="btn-sec" onclick="closeModalBtn()" style="border-radius:100px;font-size:13px;font-weight:500;">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
