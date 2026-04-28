@@ -62,8 +62,9 @@ th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left;font-si
 
 <script>
 // SUPABASE INIT
-const supabaseUrl = localStorage.getItem('sb_url');
-const supabaseKey = localStorage.getItem('sb_key');
+const supabaseUrl = localStorage.getItem('https://pwswjfoivhorcbjmatfq.supabase.co');
+const supabaseKey = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjA0MTQsImV4cCI6MjA5Mjc5NjQxNH0.10EWsGaw4uvnwXxWy9QU4zTqgLLeqtJnD6cVBcbOST4
+');
 const sb = supabaseUrl ? supabase.createClient(supabaseUrl, supabaseKey) : null;
 
 // AUTH
