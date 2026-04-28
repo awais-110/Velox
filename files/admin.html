@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Velox Admin (Production)</title>
+<title>Velox Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -13,119 +13,258 @@
   --border:rgba(255,255,255,0.07);--red:#FF5733;--green:#57FF8A;
   --font:'Merriweather Sans',sans-serif;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black);color:var(--white);font-family:var(--font);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--white);font-family:var(--font);min-height:100vh;}
+
+/* KEEP YOUR ORIGINAL DESIGN EXACT */
+#loginScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:999;}
+.login-box{background:var(--gd);border:1px solid var(--border);border-radius:24px;padding:48px;width:100%;max-width:420px;text-align:center;}
+.login-box .logo{font-size:24px;font-weight:800;margin-bottom:8px;}
+.login-box .logo em{color:var(--accent);font-style:normal;}
+.login-box p{color:var(--gray);font-size:14px;margin-bottom:36px;font-weight:300;}
+.login-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--white);font-family:var(--font);font-size:13.5px;margin-bottom:10px;outline:none;}
+.login-btn{width:100%;background:var(--accent);color:#000;padding:12px;border-radius:10px;border:none;font-size:13.5px;font-weight:700;cursor:pointer;}
+
+.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
 #adminApp{display:none;}
-#adminApp.visible{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
+#adminApp.visible{display:grid;}
 .sidebar{background:var(--gd);border-right:1px solid var(--border);padding:20px;}
-.main{padding:24px;}
-.btn{background:var(--accent);color:#000;padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:700;}
-input,select{padding:10px;background:#111;border:1px solid var(--border);color:white;border-radius:8px;width:100%;margin-top:6px;}
-table{width:100%;margin-top:20px;border-collapse:collapse;}
-th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left;font-size:13px;}
+.main{padding:32px;}
+
+.table-wrap{background:var(--gd);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+th,td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;}
+
+.btn-add{background:var(--accent);color:#000;padding:9px 18px;border:none;border-radius:100px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="loginScreen" style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;">
-  <h2>Velox Admin Login</h2>
-  <input id="email" placeholder="email" />
-  <input id="pass" type="password" placeholder="password" />
-  <button class="btn" onclick="login()">Login</button>
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">VEL<em>OX</em></div>
+    <p>Admin Login</p>
+    <input class="login-input" id="email" placeholder="Email">
+    <input class="login-input" id="pass" type="password" placeholder="Password">
+    <button class="login-btn" onclick="login()">Login</button>
+  </div>
+</div>
+<div style="text-align:right;margin-top:8px;">
+  <a href="#" onclick="forgotPassword()" style="font-size:11px;color:var(--gray);text-decoration:none;">
+    Forgot Password?
+  </a>
 </div>
 
+  
 <!-- APP -->
-<div id="adminApp">
+<div id="adminApp" class="admin-layout">
 
-  <div class="sidebar">
+  <aside class="sidebar">
     <h3>Velox</h3>
-    <button class="btn" onclick="loadProducts()">Products</button><br><br>
-    <button class="btn" onclick="loadBlogs()">Blogs</button><br><br>
-    <button class="btn" onclick="logout()">Logout</button>
-  </div>
+    <button class="btn-add" onclick="loadProducts()">Products</button>
+    <br><br>
+    <button class="btn-add" onclick="logout()">Logout</button>
+  </aside>
 
-  <div class="main">
-    <h2>Dashboard</h2>
+  <main class="main">
+    <h2>Products</h2>
 
-    <div id="formBox">
-      <h3>Add Product</h3>
-      <input id="p_name" placeholder="Name" />
-      <input id="p_price" placeholder="Price" />
-      <input id="p_tags" placeholder="Tags" />
-      <button class="btn" onclick="addProduct()">Save</button>
+    <div>
+      <input id="p_name" placeholder="Name">
+      <input id="p_price" placeholder="Price">
+      <input id="p_tags" placeholder="Tags">
+      <button class="btn-add" onclick="addProduct()">Add</button>
     </div>
 
-    <table id="table"></table>
-  </div>
+    <div class="table-wrap">
+      <table id="table"></table>
+    </div>
+  </main>
 </div>
 
 <script>
-// SUPABASE INIT
-const supabaseUrl = localStorage.getItem('https://pwswjfoivhorcbjmatfq.supabase.co');
-const supabaseKey = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjA0MTQsImV4cCI6MjA5Mjc5NjQxNH0.10EWsGaw4uvnwXxWy9QU4zTqgLLeqtJnD6cVBcbOST4
-');
-const sb = supabaseUrl ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+// SUPABASE CONNECT
+// ── SUPABASE CONFIG ──
+let sbClient = null;
+let currentUser = null;
+let demoMode = localStorage.getItem('demoMode') !== 'false';
 
-// AUTH
-async function login(){
-  const email=document.getElementById('email').value;
-  const pass=document.getElementById('pass').value;
-
-  if(!sb){ alert('Supabase not connected'); return; }
-
-  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
-  if(error){ alert(error.message); return; }
-
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('adminApp').classList.add('visible');
-  loadProducts();
+// INIT SUPABASE
+function initSupabase(url, key){
+  if(!url || !key) return null;
+  try {
+    return supabase.createClient(url, key);
+  } catch(e){
+    console.warn('Supabase init failed:', e);
+    return null;
+  }
 }
 
-// LOAD PRODUCTS (REAL DB)
-async function loadProducts(){
-  const {data} = await sb.from('products').select('*');
-  let html = `<tr><th>Name</th><th>Price</th><th>Tags</th><th>Action</th></tr>`;
+// LOAD SAVED CONFIG
+function loadSupabase(){
+  const url = localStorage.getItem('https://pwswjfoivhorcbjmatfq.supabase.co
+');
+  const key = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjA0MTQsImV4cCI6MjA5Mjc5NjQxNH0.10EWsGaw4uvnwXxWy9QU4zTqgLLeqtJnD6cVBcbOST4
+');
+  if(url && key){
+    sbClient = initSupabase(url, key);
+  }
+}
+loadSupabase();
 
-  data.forEach(p=>{
-    html += `<tr>
-      <td>${p.name}</td>
-      <td>${p.price}</td>
-      <td>${p.tags}</td>
-      <td><button onclick="deleteProduct('${p.id}')">Delete</button></td>
-    </tr>`;
+
+// ── GOOGLE LOGIN ──
+async function loginGoogle(){
+  if(!sbClient){
+    demoLogin();
+    return;
+  }
+
+  const { error } = await sbClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.href
+    }
   });
 
-  document.getElementById('table').innerHTML = html;
+  if(error) toast(error.message, 'err');
 }
 
-// ADD PRODUCT
-async function addProduct(){
-  const name=document.getElementById('p_name').value;
-  const price=document.getElementById('p_price').value;
-  const tags=document.getElementById('p_tags').value;
 
-  await sb.from('products').insert([{name,price,tags}]);
-  loadProducts();
+// ── EMAIL LOGIN ──
+async function loginEmail(){
+  const email = document.getElementById('loginEmail').value;
+  const pass  = document.getElementById('loginPass').value;
+
+  if(!email || !pass){
+    showErr('Enter email & password');
+    return;
+  }
+
+  if(!sbClient){
+    demoLogin();
+    return;
+  }
+
+  const { data, error } = await sbClient.auth.signInWithPassword({
+    email,
+    password: pass
+  });
+
+  if(error){
+    showErr(error.message);
+    return;
+  }
+
+  onLogin(data.user);
 }
 
-// DELETE
-async function deleteProduct(id){
-  await sb.from('products').delete().eq('id',id);
-  loadProducts();
+
+// ── FORGOT PASSWORD ──
+async function forgotPassword(){
+  const email = document.getElementById('loginEmail').value;
+
+  if(!email){
+    showErr('Enter email first');
+    return;
+  }
+
+  if(!sbClient){
+    toast('Connect Supabase first', 'err');
+    return;
+  }
+
+  const { error } = await sbClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  if(error){
+    showErr(error.message);
+    return;
+  }
+
+  toast('Reset email sent ✓ check inbox');
 }
 
-// BLOGS
-async function loadBlogs(){
-  const {data} = await sb.from('blogs').select('*');
-  console.log(data);
+
+// ── LOGIN HANDLER ──
+function onLogin(user){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').classList.add('visible');
+
+  const name = user?.email || 'Admin';
+
+  document.getElementById('userName').textContent = name;
+  document.getElementById('userAv').textContent = name[0].toUpperCase();
+
+  renderAllTables();
+  toast('Welcome ' + name);
 }
 
-// LOGOUT
+
+// ── DEMO LOGIN ──
+function demoLogin(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').classList.add('visible');
+
+  document.getElementById('userName').textContent = 'Admin (Demo)';
+  document.getElementById('userAv').textContent = 'A';
+
+  renderAllTables();
+  toast('Demo Mode Active');
+}
+
+
+// ── LOGOUT ──
 async function logout(){
-  await sb.auth.signOut();
-  location.reload();
+  if(sbClient){
+    await sbClient.auth.signOut();
+  }
+
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminApp').classList.remove('visible');
 }
+
+
+// ── AUTH CHECK ON LOAD ──
+window.addEventListener('load', async ()=>{
+
+  loadSupabase();
+
+  if(sbClient){
+    const { data } = await sbClient.auth.getSession();
+
+    if(data?.session?.user){
+      onLogin(data.session.user);
+      return;
+    }
+
+    const { data: userData } = await sbClient.auth.getUser();
+    if(userData?.user){
+      onLogin(userData.user);
+      return;
+    }
+  }
+});
+
+
+// ── TOAST ──
+function toast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type==='err'?' err':'');
+
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.className='', 2500);
+}
+
+
+// ── ERROR ──
+function showErr(msg){
+  document.getElementById('loginErr').textContent = msg;
+}
+
 </script>
 
 </body>
