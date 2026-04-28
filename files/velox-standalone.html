@@ -617,7 +617,8 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 let sb = null;
 try {
-  if (SUPABASE_KEY !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzIyMDQxNCwiZXhwIjoyMDkyNzk2NDE0fQ.YRfkqHIVwpRuHAhAU3PkBoHCdbThDK-WO-zplLuYsEw' && SUPABASE_KEY.length > 20) {
+  if (SUPABASE_KEY !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjA0MTQsImV4cCI6MjA5Mjc5NjQxNH0.10EWsGaw4uvnwXxWy9QU4zTqgLLeqtJnD6cVBcbOST4
+' && SUPABASE_KEY.length > 20) {
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     console.log('✓ Supabase connected — loading live data');
   } else {
