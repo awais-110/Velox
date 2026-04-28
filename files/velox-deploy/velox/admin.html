@@ -50,7 +50,13 @@ th,td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;}
     <button class="login-btn" onclick="login()">Login</button>
   </div>
 </div>
+<div style="text-align:right;margin-top:8px;">
+  <a href="#" onclick="forgotPassword()" style="font-size:11px;color:var(--gray);text-decoration:none;">
+    Forgot Password?
+  </a>
+</div>
 
+  
 <!-- APP -->
 <div id="adminApp" class="admin-layout">
 
@@ -79,64 +85,184 @@ th,td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;}
 
 <script>
 // SUPABASE CONNECT
-const supabaseUrl = localStorage.getItem('https://pwswjfoivhorcbjmatfq.supabase.co
-');
-const supabaseKey = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjA0MTQsImV4cCI6MjA5Mjc5NjQxNH0.10EWsGaw4uvnwXxWy9QU4zTqgLLeqtJnD6cVBcbOST4
-');
-const sb = supabaseUrl && supabaseKey ? supabase.createClient(supabaseUrl, supabaseKey) : null;
+// ── SUPABASE CONFIG ──
+let sbClient = null;
+let currentUser = null;
+let demoMode = localStorage.getItem('demoMode') !== 'false';
 
-// LOGIN
-async function login(){
-  if(!sb){ alert('Set Supabase first in settings'); return; }
-  const email=document.getElementById('email').value;
-  const pass=document.getElementById('pass').value;
-
-  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
-  if(error){ alert(error.message); return; }
-
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('adminApp').classList.add('visible');
-  loadProducts();
+// INIT SUPABASE
+function initSupabase(url, key){
+  if(!url || !key) return null;
+  try {
+    return supabase.createClient(url, key);
+  } catch(e){
+    console.warn('Supabase init failed:', e);
+    return null;
+  }
 }
 
-// LOAD PRODUCTS (REAL)
-async function loadProducts(){
-  const {data} = await sb.from('products').select('*');
+// LOAD SAVED CONFIG
+function loadSupabase(){
+  const url = localStorage.getItem('https://pwswjfoivhorcbjmatfq.supabase.co
+');
+  const key = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3c3dqZm9pdmhvcmNiam1hdGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjA0MTQsImV4cCI6MjA5Mjc5NjQxNH0.10EWsGaw4uvnwXxWy9QU4zTqgLLeqtJnD6cVBcbOST4
+');
+  if(url && key){
+    sbClient = initSupabase(url, key);
+  }
+}
+loadSupabase();
 
-  let html = `<tr><th>Name</th><th>Price</th><th>Tags</th><th>Action</th></tr>`;
 
-  data.forEach(p=>{
-    html += `<tr>
-      <td>${p.name}</td>
-      <td>${p.price}</td>
-      <td>${p.tags}</td>
-      <td><button onclick="deleteProduct('${p.id}')">Delete</button></td>
-    </tr>`;
+// ── GOOGLE LOGIN ──
+async function loginGoogle(){
+  if(!sbClient){
+    demoLogin();
+    return;
+  }
+
+  const { error } = await sbClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.href
+    }
   });
 
-  document.getElementById('table').innerHTML = html;
+  if(error) toast(error.message, 'err');
 }
 
-// ADD
-async function addProduct(){
-  const name=document.getElementById('p_name').value;
-  const price=document.getElementById('p_price').value;
-  const tags=document.getElementById('p_tags').value;
 
-  await sb.from('products').insert([{name,price,tags}]);
-  loadProducts();
+// ── EMAIL LOGIN ──
+async function loginEmail(){
+  const email = document.getElementById('loginEmail').value;
+  const pass  = document.getElementById('loginPass').value;
+
+  if(!email || !pass){
+    showErr('Enter email & password');
+    return;
+  }
+
+  if(!sbClient){
+    demoLogin();
+    return;
+  }
+
+  const { data, error } = await sbClient.auth.signInWithPassword({
+    email,
+    password: pass
+  });
+
+  if(error){
+    showErr(error.message);
+    return;
+  }
+
+  onLogin(data.user);
 }
 
-// DELETE
-async function deleteProduct(id){
-  await sb.from('products').delete().eq('id',id);
-  loadProducts();
+
+// ── FORGOT PASSWORD ──
+async function forgotPassword(){
+  const email = document.getElementById('loginEmail').value;
+
+  if(!email){
+    showErr('Enter email first');
+    return;
+  }
+
+  if(!sbClient){
+    toast('Connect Supabase first', 'err');
+    return;
+  }
+
+  const { error } = await sbClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  if(error){
+    showErr(error.message);
+    return;
+  }
+
+  toast('Reset email sent ✓ check inbox');
 }
 
-// LOGOUT
+
+// ── LOGIN HANDLER ──
+function onLogin(user){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').classList.add('visible');
+
+  const name = user?.email || 'Admin';
+
+  document.getElementById('userName').textContent = name;
+  document.getElementById('userAv').textContent = name[0].toUpperCase();
+
+  renderAllTables();
+  toast('Welcome ' + name);
+}
+
+
+// ── DEMO LOGIN ──
+function demoLogin(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').classList.add('visible');
+
+  document.getElementById('userName').textContent = 'Admin (Demo)';
+  document.getElementById('userAv').textContent = 'A';
+
+  renderAllTables();
+  toast('Demo Mode Active');
+}
+
+
+// ── LOGOUT ──
 async function logout(){
-  await sb.auth.signOut();
-  location.reload();
+  if(sbClient){
+    await sbClient.auth.signOut();
+  }
+
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminApp').classList.remove('visible');
+}
+
+
+// ── AUTH CHECK ON LOAD ──
+window.addEventListener('load', async ()=>{
+
+  loadSupabase();
+
+  if(sbClient){
+    const { data } = await sbClient.auth.getSession();
+
+    if(data?.session?.user){
+      onLogin(data.session.user);
+      return;
+    }
+
+    const { data: userData } = await sbClient.auth.getUser();
+    if(userData?.user){
+      onLogin(userData.user);
+      return;
+    }
+  }
+});
+
+
+// ── TOAST ──
+function toast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type==='err'?' err':'');
+
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.className='', 2500);
+}
+
+
+// ── ERROR ──
+function showErr(msg){
+  document.getElementById('loginErr').textContent = msg;
 }
 
 </script>
